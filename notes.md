@@ -2,6 +2,8 @@
 
 ## Confirmed decisions
 
+- 2026-09-03 session aggregate correction: `/api/sessions` computes turn/token totals independently from tool-call counts, so a turn's `total_tokens` is counted once regardless of how many tools it invoked.
+
 - The initial measurable engineering budget is defined in `reports/technical-constraints.md`.
 - Default TraceDeck persistent storage is capped at 1 GiB, with a 1.25 GiB total working-disk ceiling.
 - Capture overhead is limited to 100 ms p95 per synchronous hook and 300 ms p95 per Codex turn.

@@ -1,5 +1,9 @@
 # Work log
 
+## 2026-09-03
+
+- Corrected session token aggregation to avoid multiplying turn totals by joined tool calls. Added an integration regression test covering a session with multiple tool calls; the session total now remains the sum of unique turn totals.
+
 ## 2026-09-01
 
 - Added the initial TraceDeck project documentation structure.

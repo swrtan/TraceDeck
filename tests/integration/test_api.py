@@ -221,7 +221,15 @@ def test_sessions_and_compare_support_sessions_and_historical_ranges(tmp_path):
         upsert_turn(db, first, "turn-a", started_at="2026-09-01T10:00:00+00:00", total_tokens=10, duration_ms=100, created_at="2026-09-01", updated_at="2026-09-01")
         upsert_turn(db, second, "turn-b", started_at="2026-09-02T10:00:00+00:00", total_tokens=20, duration_ms=200, created_at="2026-09-02", updated_at="2026-09-02")
         headers = {"host": "127.0.0.1"}
-        assert client.get("/api/sessions", headers=headers).json()["items"][0]["turns"] == 1
+        session_items = client.get("/api/sessions", headers=headers).json()["items"]
+        assert session_items[0]["turns"] == 1
+        assert session_items[0]["known_tokens"] == 20
+        heavy_turn = upsert_turn(db, first, "tool-heavy-turn", total_tokens=30, created_at="2026-09-01", updated_at="2026-09-01")
+        upsert_tool_call(db, heavy_turn, "call-1", "shell", created_at="2026-09-01", updated_at="2026-09-01")
+        upsert_tool_call(db, heavy_turn, "call-2", "shell", created_at="2026-09-01", updated_at="2026-09-01")
+        first_item = next(item for item in client.get("/api/sessions", headers=headers).json()["items"] if item["id"] == first)
+        assert first_item["known_tokens"] == 40
+        assert first_item["tool_calls"] == 2
         session_compare = client.get(f"/api/compare?session_a={first}&session_b={second}", headers=headers)
         assert session_compare.status_code == 200
         assert session_compare.json()["a"]["known_tokens"] == 10

@@ -273,10 +273,12 @@ def create_app(config: Config | None = None) -> FastAPI:
         db = request.app.state.db
         rows = db.execute("""SELECT s.id, s.codex_session_id, s.model_last, s.lifecycle_status, s.started_at, s.ended_at,
             COALESCE((SELECT m.preview FROM turns st JOIN turn_messages stm ON stm.turn_id=st.id JOIN messages m ON m.id=stm.message_id WHERE st.session_id=s.id AND m.role='user' ORDER BY COALESCE(st.started_at, st.created_at), stm.position LIMIT 1), 'Untitled session') session_title,
-            COUNT(DISTINCT t.id) turns, SUM(CASE WHEN t.total_tokens IS NOT NULL THEN t.total_tokens ELSE 0 END) known_tokens,
-            COUNT(DISTINCT tc.id) tool_calls, SUM(CASE WHEN tc.lifecycle_status='failed' THEN 1 ELSE 0 END) failed_tools
-            FROM sessions s LEFT JOIN turns t ON t.session_id=s.id LEFT JOIN tool_calls tc ON tc.turn_id=t.id
-            GROUP BY s.id ORDER BY COALESCE(s.started_at, s.created_at) DESC, s.id DESC LIMIT ?""", (limit,)).fetchall()
+            (SELECT COUNT(*) FROM turns t WHERE t.session_id=s.id) turns,
+            (SELECT COALESCE(SUM(t.total_tokens), 0) FROM turns t WHERE t.session_id=s.id AND t.total_tokens IS NOT NULL) known_tokens,
+            (SELECT COUNT(*) FROM tool_calls tc JOIN turns t ON t.id=tc.turn_id WHERE t.session_id=s.id) tool_calls,
+            (SELECT COUNT(*) FROM tool_calls tc JOIN turns t ON t.id=tc.turn_id WHERE t.session_id=s.id AND tc.lifecycle_status='failed') failed_tools
+            FROM sessions s
+            ORDER BY COALESCE(s.started_at, s.created_at) DESC, s.id DESC LIMIT ?""", (limit,)).fetchall()
         return {"items": [dict(row) for row in rows], "limit": limit}
 
     @app.get("/api/sessions/{session_id}")
