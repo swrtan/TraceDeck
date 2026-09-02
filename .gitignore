@@ -1,0 +1,34 @@
+# Local runtime and captured data
+.runtime/
+.release/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+spool/
+quarantine/
+incidents/
+*.log
+
+# Python environments, caches, and build output
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Local editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local release/validation artifacts
+*.whl
+*.tar.gz

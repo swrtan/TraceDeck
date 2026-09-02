@@ -1,0 +1,2 @@
+"""Local TraceDeck web application."""
+
