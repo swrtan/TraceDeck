@@ -10,6 +10,18 @@ Start with the interactive architecture explainer. It walks through the complete
 
 The explainer is also available as [`tracedeck_interactive_explainer.html`](tracedeck_interactive_explainer.html) in this repository. GitHub Pages publishes it automatically from the repository.
 
+### Data path in one line
+
+```text
+Codex hook → hook shim → atomic local spool → redact/truncate/normalize → SQLite → FastAPI → dashboard/export
+```
+
+TraceDeck does not persist raw hook envelopes or raw tool responses. Each stored value keeps its source and quality where available; unknown values stay unknown instead of becoming zero. Long fields are bounded, and truncation remains visible in metadata. The collector is fail-open, so a TraceDeck failure must not block a Codex turn.
+
+### Export and AI analysis boundary
+
+TraceDeck can produce bounded local CSV exports for selected turn, session, tool, duration, token, source, and quality fields. Export files are not automatically sent anywhere and are not written back into the database. A user may inspect an export, remove sensitive rows, and manually provide selected data to an AI tool for analysis. TraceDeck itself does not call an LLM, account-usage API, or external runtime service.
+
 ## What it does
 
 - Captures supported Codex lifecycle hooks without proxying or changing Codex behaviour.
