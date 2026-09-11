@@ -10,6 +10,8 @@ Start with the interactive architecture explainer. It walks through the complete
 
 The explainer is also available as [`tracedeck_interactive_explainer.html`](tracedeck_interactive_explainer.html) in this repository. GitHub Pages publishes it automatically from the repository.
 
+The public Pages surface is the reviewer-friendly product and architecture tour. The actual dashboard remains local by design because it reads local Codex hook/transcript data and runs its FastAPI service on `127.0.0.1`.
+
 ### Data path in one line
 
 ```text

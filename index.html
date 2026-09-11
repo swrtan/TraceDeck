@@ -3,10 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=tracedeck_interactive_explainer.html">
-  <title>TraceDeck System Explainer</title>
+  <meta name="description" content="TraceDeck is a local-first observability system for Codex. Explore the architecture, privacy boundaries, and local runtime.">
+  <title>TraceDeck — Local-first Codex observability</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#091019;color:#edf5f6}*{box-sizing:border-box}body{max-width:960px;margin:0 auto;padding:10vh 24px;background:radial-gradient(circle at 82% 0,#1b3b4d,transparent 40%),#091019}main{border:1px solid #29404c;border-radius:22px;padding:clamp(28px,6vw,68px);background:#101b27}p{color:#9fb2ba;line-height:1.7;max-width:68ch}.eyebrow{font:12px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;color:#64e0d0}h1{font-size:clamp(42px,8vw,86px);line-height:.94;letter-spacing:-.06em;max-width:760px;margin:22px 0}.accent{color:#64e0d0}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}a{display:inline-block;border:1px solid #3a5360;border-radius:999px;padding:12px 17px;text-decoration:none;color:#edf5f6}a.primary{background:#64e0d0;border-color:#64e0d0;color:#071017}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:54px}.card{border-top:1px solid #29404c;padding-top:15px}.card b{display:block;font-size:14px}.card span{display:block;color:#8198a1;font-size:13px;line-height:1.5;margin-top:7px}small{display:block;color:#71858c;margin-top:34px;font:12px ui-monospace,SFMono-Regular,Consolas,monospace}@media(max-width:680px){.grid{grid-template-columns:1fr}body{padding:5vh 14px}main{padding:30px 22px}}
+  </style>
 </head>
-<body>
-  <p>Opening the <a href="tracedeck_interactive_explainer.html">TraceDeck interactive system explainer</a>…</p>
-</body>
+<body><main>
+  <div class="eyebrow">TRACEDECK / LOCAL-FIRST OBSERVABILITY</div>
+  <h1>See how Codex work becomes <span class="accent">evidence.</span></h1>
+  <p>TraceDeck is a privacy-bounded local observer for Codex. It follows supported lifecycle signals from hook to spool, normalization, SQLite, API, dashboard, and export — without proxying Codex, calling an LLM, or sending telemetry.</p>
+  <div class="actions"><a class="primary" href="tracedeck_interactive_explainer.html">Explore the system visually</a><a href="https://github.com/swrtan/TraceDeck">Read the source and engineering docs</a><a href="https://github.com/swrtan/TraceDeck#run">Run the local dashboard</a></div>
+  <div class="grid"><div class="card"><b>For recruiters</b><span>A clear visual explanation of the product, its user value, and its engineering boundaries.</span></div><div class="card"><b>For technical reviewers</b><span>Source map, provenance-aware token reconciliation, privacy policy, tests, and performance evidence in the repository.</span></div><div class="card"><b>For local users</b><span>The real FastAPI dashboard runs on 127.0.0.1 and reads existing local Codex data only.</span></div></div>
+  <small>Public explainer · local runtime · no external inference service</small>
+</main></body>
 </html>
