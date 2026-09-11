@@ -25,11 +25,16 @@
     <div class="topbar"><div class="brand">TRACEDECK / SYSTEM EXPLAINER</div><div class="status"><i class="dot"></i> local-first · passive · loopback</div></div>
     <div class="eyebrow">Sistemi anlamak için etkileşimli harita</div>
     <h1>TraceDeck neyi,<br><span class="accent">nasıl</span> gözlüyor?</h1>
-    <p class="lead">Bu sayfa, Codex oturumlarından gelen sınırlı yerel sinyallerin nasıl güvenli biçimde event’e, veriye ve dashboard görünümüne dönüştüğünü anlatır.</p>
+    <p class="lead">TraceDeck, Codex kullanırken bilgisayarında neler olduğunu sana gösteren yerel bir gözlem defteridir. Codex’i yönetmez, cevap üretmez ve verilerini internete göndermez; yalnızca Codex’in zaten bıraktığı izinli işaretleri okuyup “hangi oturum ne zaman başladı, hangi araç kullanıldı, hangi bilgiler gerçekten ölçüldü?” sorularını anlaşılır bir dashboard’da gösterir.</p>
     <div class="jump"><button data-scroll="flow">Veri akışını gör</button><button data-scroll="events">Event’leri incele</button><button data-scroll="decisions">Tasarım kararları</button><button data-scroll="review">Review checklist</button></div>
   </div></header>
 
   <main class="shell">
+    <section id="start"><div class="section-head"><div><div class="eyebrow">Başlangıç / Sıfırdan</div><h2>Önce tek cümleyle:</h2></div><p>Teknik terimleri daha sonra açacağız. Şimdilik TraceDeck’i küçük bir güvenlik kamerası gibi düşün.</p></div>
+      <div class="grid grid-3"><div class="panel"><span class="tag">Codex</span><h3>Çalışan sistem</h3><p>Sen Codex’e bir şey söylersin. Codex modelle konuşur, dosyalara veya araçlara erişebilir ve bir turn yürütür.</p></div><div class="panel"><span class="tag">TraceDeck</span><h3>Pasif gözlemci</h3><p>TraceDeck bu sırada yalnızca desteklenen olayları dinler. Turn başlatmaz, içeriği değiştirmez, karar vermez.</p></div><div class="panel"><span class="tag">Dashboard</span><h3>Anlaşılır kayıt</h3><p>Toplanan sınırlı bilgiyi oturum, turn, araç, süre, token ve veri kalitesi olarak yerel ekranda gösterir.</p></div></div>
+      <div class="panel" style="margin-top:16px"><h3>Bir örnek</h3><p>Sen “bu klasördeki testleri çalıştır” dersin. Codex bir shell aracı kullanır. TraceDeck, “bir shell çağrısı yapıldı” bilgisini ve desteklenen sonucu kaydedebilir. Fakat şifreni, ham tool cevabını veya Codex’in tüm iç düşünce sürecini kaydetmeye çalışmaz. Ölçemediği bir şeyi de ölçmüş gibi göstermez.</p></div>
+    </section>
+
     <section id="flow"><div class="section-head"><div><div class="eyebrow">01 / Büyük resim</div><h2>Bir Codex event’i<br>yolculuk yapar.</h2></div><p>Bir node’a tıkla. Her katmanın sorumluluğunu, neyi garanti ettiğini ve neyi özellikle yapmadığını gör.</p></div>
       <div class="flow" role="tablist" aria-label="TraceDeck veri akışı">
         <button class="node active" data-node="hooks"><span class="node-num">01</span><strong>Lifecycle hooks</strong><small>Codex’in verdiği sinyal</small></button>
@@ -42,6 +47,7 @@
     </section>
 
     <section id="events"><div class="section-head"><div><div class="eyebrow">02 / Event anatomisi</div><h2>Her event aynı değildir.</h2></div><p>Hook şeması hangi alanı veriyorsa onu saklarız. Verilmeyen alan “0” değil, <span class="warning">unknown</span> kalır.</p></div>
+      <div class="panel" style="margin-bottom:16px"><h3>Event nedir?</h3><p>Event, “bir şey oldu” anlamına gelen küçük bir kayıttır. Örneğin <code>UserPromptSubmit</code> kullanıcının yeni bir istek gönderdiğini; <code>PreToolUse</code> Codex’in bir araç çağırmak üzere olduğunu; <code>Stop</code> ise turn’ün kapanış sinyalini anlatır. TraceDeck bütün konuşmayı kopyalamaz; bu olaylardan güvenilir ve gerekli alanları seçer.</p></div>
       <div class="event-demo"><div class="event-list" role="tablist">
         <button class="active" data-event="prompt"><b>UserPromptSubmit</b><span>turn başlangıcı + bounded prompt</span></button>
         <button data-event="tool"><b>PreToolUse / PostToolUse</b><span>tool çağrısı ve sonucu</span></button>
@@ -61,6 +67,7 @@
     </section>
 
     <section id="pipeline"><div class="section-head"><div><div class="eyebrow">04 / Veri modeli</div><h2>Null, burada<br>bir özelliktir.</h2></div><p>TraceDeck’in güvenilirliği, bilmediği şeyi doğru biçimde bilmediğini söylemesinden gelir.</p></div>
+      <div class="panel" style="margin-bottom:16px"><h3>Dashboard’daki bir sayı nereden geliyor?</h3><p>Önce kaynağı sorarız: Bu bilgi doğrudan hook’tan mı geldi, tanınan bir transcript’ten mi okundu, yoksa yalnızca gözlemci tarafından mı hesaplandı? Sonra kaliteyi sorarız: Tam mı, kısmi mi, kısaltılmış mı, eski mi? Bu iki cevap her ölçümle birlikte taşınır. Böylece “12.000 token” ile “token bilgisi yok” arasındaki fark kaybolmaz.</p></div>
       <div class="schema"><div class="schema-item"><b>known value</b><span>Kaynak tarafından gerçekten sağlanan ölçüm. Örn. <code>total_tokens = 18077</code>.</span></div><div class="schema-item"><b>known zero</b><span>Ölçüm var ve değer gerçekten sıfır. Unknown ile birleştirilmez.</span></div><div class="schema-item"><b>unknown / null</b><span>Kaynak bu bilgiyi vermedi veya format güvenilir biçimde tanınmadı.</span></div><div class="schema-item"><b>source + quality</b><span>Hook, transcript, desktop import; authoritative, observed, partial gibi provenance.</span></div><div class="schema-item"><b>truncated</b><span>Alan boyut limiti aşıldı. Veri kısaltıldı ve bu durum görünür kalır.</span></div><div class="schema-item"><b>stale</b><span>Turn uzun süre kapanmadı. ACTIVE ile STALE / INCOMPLETE ayrılır.</span></div></div>
     </section>
 
@@ -70,6 +77,10 @@
 
     <section id="why"><div class="section-head"><div><div class="eyebrow">06 / Karar laboratuvarı</div><h2>“Neden böyle?”<br>sorularına kısa cevaplar.</h2></div><p>Bir başlığa tıklayarak kararın arkasındaki mühendislik gerekçesini aç.</p></div>
       <div class="switcher" role="tablist"><button class="active" data-answer="failopen">Fail-open</button><button data-answer="appserver">App Server yok</button><button data-answer="sqlite">Neden SQLite?</button><button data-answer="version">Neden version gate?</button></div><div class="panel copy" id="answer"><strong>Fail-open ne demek?</strong><p>TraceDeck bozulursa Codex turn’ü bozulmaz. Hook timeout’a uğrar, event spool’a yazılamaz veya database kilitlenirse TraceDeck kendi hatasını yerel olarak raporlar; normal Codex davranışını durdurmaz.</p></div>
+    </section>
+
+    <section id="limits"><div class="section-head"><div><div class="eyebrow">Sınırlar / Dürüstlük</div><h2>TraceDeck’in<br>yapmadıkları.</h2></div><p>Bir sistemi anlamanın en iyi yollarından biri, ondan ne beklememen gerektiğini bilmektir.</p></div>
+      <div class="grid grid-2"><div class="panel"><h3>Bu bir billing sayacı değil</h3><p>Gösterilen token toplamları yerel olarak gözlemlenen değerlerdir. Hesap faturası, haftalık kota veya hesabın sunucu tarafındaki toplam kullanımı değildir.</p></div><div class="panel"><h3>Bu bir başarı ölçeri değil</h3><p>Bir turn’ün “completed” olması, kullanıcının hedefinin başarıldığını kanıtlamaz. TraceDeck lifecycle’ı gösterir; görevin anlamını uydurmaz.</p></div><div class="panel"><h3>Her tool görünmeyebilir</h3><p>Hosted tools veya bazı özel yollar local hook kapsamının dışında kalabilir. Dashboard’daki coverage alanı bu boşluğu görünür tutar.</p></div><div class="panel"><h3>Yeni formatlar hemen tanınmayabilir</h3><p>Codex transcript formatı değişirse TraceDeck eski parser’ın yanlış sonuç üretmesine izin vermek yerine kaydı unsupported/unavailable olarak işaretler.</p></div></div>
     </section>
 
     <section id="review"><div class="section-head"><div><div class="eyebrow">07 / Senior review lens</div><h2>İnceleme nereden<br>başlamalı?</h2></div><p>Bu liste, sistemin “çalışıyor” olmasından öte production-readiness açısından bakılacak yerleri gösterir.</p></div>
