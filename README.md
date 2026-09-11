@@ -6,7 +6,7 @@ TraceDeck is a local-first observability dashboard for Codex. It records support
 
 Start with the interactive architecture explainer. It walks through the complete path from Codex lifecycle hooks to the local spool, normalization, SQLite, API, and dashboard, with explanations of the privacy and reliability decisions.
 
-**[Open the interactive TraceDeck system explainer](https://swrtan.github.io/TraceDeck/tracedeck_interactive_explainer.html)**
+**[Open the interactive TraceDeck system explainer](https://swrtan.github.io/TraceDeck/)**
 
 The explainer is also available as [`tracedeck_interactive_explainer.html`](tracedeck_interactive_explainer.html) in this repository. GitHub Pages publishes it automatically from the repository.
 
